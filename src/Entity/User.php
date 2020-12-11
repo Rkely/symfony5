@@ -39,9 +39,9 @@ class User implements UserInterface
     private $isVerified = false;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Role::class, inversedBy="users")
+     * @ORM\Column(type="json")
      */
-    private $roles;
+    private $roles = [];
 
     public function __construct()
     {
@@ -80,11 +80,11 @@ class User implements UserInterface
      */
     public function getRoles()
     {
-        // $roles = $this->roles;
-        // // guarantee every user at least has ROLE_USER
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
 
-        // $roles[] = 'ROLE_USER';
-        // return array_unique($roles);
+        $roles[] = 'ROLE_USER';
+        return array_unique($roles);
     }
 
     public function setRoles(array $roles): self
@@ -134,22 +134,6 @@ class User implements UserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
-
-        return $this;
-    }
-
-    public function addRole(Role $role): self
-    {
-        if (!$this->roles->contains($role)) {
-            $this->roles[] = $role;
-        }
-
-        return $this;
-    }
-
-    public function removeRole(Role $role): self
-    {
-        $this->roles->removeElement($role);
 
         return $this;
     }
